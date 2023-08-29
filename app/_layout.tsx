@@ -9,6 +9,7 @@ import {
   Nunito_800ExtraBold,
   Nunito_900Black,
 } from '@expo-google-fonts/nunito';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,6 +23,8 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 export default function Layout() {
   const [loaded, error] = useFonts({
@@ -49,13 +52,15 @@ export default function Layout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name='index'
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <Stack>
+        <Stack.Screen
+          name='index'
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack>
+    </QueryClientProvider>
   );
 }
