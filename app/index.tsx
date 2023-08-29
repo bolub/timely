@@ -1,11 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { StyledText } from '../components/StyledText';
+import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
-      <StyledText style={styles.title}>Hello with nunito bitches</StyledText>
+      <Text style={styles.title}>Hello with nunito bitches</Text>
     </SafeAreaView>
   );
 }
@@ -16,6 +15,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'nunito-regular',
   },
 });

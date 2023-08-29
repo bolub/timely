@@ -2,14 +2,13 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import {
   useFonts,
-  NunitoSans_200ExtraLight,
-  NunitoSans_300Light,
-  NunitoSans_400Regular,
-  NunitoSans_600SemiBold,
-  NunitoSans_700Bold,
-  NunitoSans_800ExtraBold,
-  NunitoSans_900Black,
-} from '@expo-google-fonts/nunito-sans';
+  Nunito_300Light,
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  Nunito_800ExtraBold,
+  Nunito_900Black,
+} from '@expo-google-fonts/nunito';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -26,13 +25,12 @@ SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
   const [loaded, error] = useFonts({
-    NunitoSans_200ExtraLight,
-    NunitoSans_300Light,
-    NunitoSans_400Regular,
-    NunitoSans_600SemiBold,
-    NunitoSans_700Bold,
-    NunitoSans_800ExtraBold,
-    NunitoSans_900Black,
+    'nunito-light': Nunito_300Light,
+    'nunito-regular': Nunito_400Regular,
+    'nunito-semibold': Nunito_600SemiBold,
+    'nunito-bold': Nunito_700Bold,
+    'nunito-extrabold': Nunito_800ExtraBold,
+    'nunito-black': Nunito_900Black,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
