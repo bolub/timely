@@ -1,3 +1,4 @@
+import { borderRadius } from '@/theme/theme';
 import { Image } from 'expo-image';
 import React from 'react';
 import { FlatList, Text, View, Dimensions } from 'react-native';
@@ -64,10 +65,9 @@ const TimeSlotComponent = ({
     <View
       style={{
         backgroundColor: 'white',
-        borderRadius: 16,
+        borderRadius: borderRadius.large,
         height: 194,
         width: itemSize - 24,
-        // maxWidth: 146,
         alignItems: 'center',
         justifyContent: 'center',
       }}
@@ -79,7 +79,7 @@ const TimeSlotComponent = ({
           width: 40,
           height: 40,
           backgroundColor: 'white',
-          borderRadius: 999,
+          borderRadius: borderRadius.rounded,
         }}
       />
 

@@ -1,16 +1,17 @@
 import { Text, View } from 'react-native';
 import { Image } from 'expo-image';
+import { borderRadius, colors } from '@/theme/theme';
 
 export const LocalInfo = () => {
   return (
     <View
       style={{
-        backgroundColor: '#10B981',
+        backgroundColor: colors.primary.main,
         height: 158,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 16,
+        borderRadius: borderRadius.large,
         padding: 30,
       }}
     >
@@ -21,7 +22,7 @@ export const LocalInfo = () => {
           width: 36,
           height: 36,
           backgroundColor: 'white',
-          borderRadius: 999,
+          borderRadius: borderRadius.rounded,
         }}
       />
 

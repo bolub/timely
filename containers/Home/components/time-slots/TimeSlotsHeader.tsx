@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { borderRadius, colors } from '@/theme/theme';
 
 export const TimeSlotsHeader = () => {
   return (
@@ -21,9 +22,9 @@ export const TimeSlotsHeader = () => {
 
       <Pressable
         style={{
-          backgroundColor: 'rgba(16, 185, 129, 0.10)',
+          backgroundColor: colors.primary.light,
           padding: 10,
-          borderRadius: 10,
+          borderRadius: borderRadius.small,
           flexDirection: 'row',
           alignItems: 'center',
         }}
@@ -31,13 +32,13 @@ export const TimeSlotsHeader = () => {
         <Feather
           name='plus'
           size={16}
-          color='#10B981'
+          color={colors.primary.main}
           style={{ marginRight: 6 }}
         />
 
         <Text
           style={{
-            color: '#10B981',
+            color: colors.primary.main,
             fontFamily: 'nunito-black',
             fontSize: 14,
           }}
