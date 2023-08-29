@@ -1,27 +1,5 @@
-import { ScrollView, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LocalInfo } from '../components/LocalInfo';
-import { TimeSlots } from '../components/TimeSlots';
+import { HomePage } from '../containers/Home/HomePage';
 
 export default function Home() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={{
-          paddingTop: 24,
-          paddingHorizontal: 24,
-        }}
-      >
-        <LocalInfo />
-
-        <TimeSlots />
-      </ScrollView>
-    </SafeAreaView>
-  );
+  return <HomePage />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from 'react-native';
-import { TimeSlotsHeader } from './TimeSlotsHeader';
-import { TimeSlotsList } from './TimeSlotsList';
+import { View } from 'react-native';
+import { TimeSlotsHeader } from '@/containers/Home/components/TimeSlots/TimeSlotsHeader';
+import { TimeSlotsList } from '@/containers/Home/components/TimeSlots/TimeSlotsList';
 
 export const TimeSlots = () => {
   return (

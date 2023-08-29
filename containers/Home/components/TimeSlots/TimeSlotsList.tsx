@@ -44,6 +44,9 @@ export const TimeSlotsList = () => {
       contentContainerStyle={{ gap }}
       columnWrapperStyle={{ gap }}
       key={numColumns}
+      style={{
+        height: 600,
+      }}
     />
   );
 };
