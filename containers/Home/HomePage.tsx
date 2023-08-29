@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LocalInfo } from '@/containers/Home/components/LocalInfo';
-import { TimeSlots } from '@/containers/Home/components/TimeSlots';
+import { LocalInfo } from '@/containers/home/components/LocalInfo';
+import { TimeSlots } from '@/containers/home/components/time-slots';
 
 export const HomePage = () => {
   return (
