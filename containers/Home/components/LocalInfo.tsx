@@ -1,8 +1,15 @@
 import { Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
+import { useQuery } from '@tanstack/react-query';
+import { getLocalData } from '@/api/timezone';
 
 export const LocalInfo = () => {
+  const { data } = useQuery({
+    queryKey: ['localData'],
+    queryFn: getLocalData,
+  });
+
   return (
     <View
       style={{
@@ -35,7 +42,7 @@ export const LocalInfo = () => {
           color: 'white',
         }}
       >
-        Local (Turku, Finland)
+        Local ({data?.timezone && data?.timezone?.replace('/', ', ')})
       </Text>
 
       <Text
@@ -47,7 +54,7 @@ export const LocalInfo = () => {
           color: 'white',
         }}
       >
-        12:00PM
+        {data?.datetime && new Date(data?.datetime).toLocaleTimeString()}
       </Text>
     </View>
   );
