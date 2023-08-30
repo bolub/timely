@@ -9,4 +9,5 @@ export const borderRadius = {
   large: 16,
   small: 10,
   rounded: 999,
+  'extra-small': 8,
 } as const;
