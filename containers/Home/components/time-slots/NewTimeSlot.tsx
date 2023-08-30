@@ -16,16 +16,20 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
     };
   });
 
-  const selectedCountryTimezones = countriesWithTimezone
-    .filter((ctz) => {
-      return ctz.name === country;
-    })[0]
-    ?.timezones?.map((tz) => {
-      return {
-        label: tz,
-        value: tz,
-      };
-    });
+  const selectedCountryTimezones = (value?: string) => {
+    const cc = value || country;
+
+    return countriesWithTimezone
+      .filter((ctz) => {
+        return ctz?.name === cc;
+      })[0]
+      ?.timezones?.map((tz) => {
+        return {
+          label: tz,
+          value: tz,
+        };
+      });
+  };
 
   return (
     <>
@@ -47,7 +51,12 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
         >
           <CustomLabel>Choose a country</CustomLabel>
           <CustomSelect
-            setValue={setCountry}
+            onValueChange={(itemValue) => {
+              setCountry(itemValue);
+              setCountryTimezone(
+                selectedCountryTimezones(itemValue)[0]?.value || ''
+              );
+            }}
             value={country}
             placeholder='Search countries...'
             options={allCountries}
@@ -61,10 +70,12 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
         >
           <CustomLabel>Select country timezone</CustomLabel>
           <CustomSelect
-            setValue={setCountryTimezone}
+            onValueChange={(itemValue) => {
+              setCountryTimezone(itemValue);
+            }}
             value={countryTimezone}
             placeholder='Select country timezone'
-            options={selectedCountryTimezones}
+            options={selectedCountryTimezones()}
           />
         </View>
 
@@ -74,11 +85,14 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
             style={{
               justifyContent: 'center',
               borderRadius: borderRadius['extra-small'],
-              backgroundColor: colors.primary.main,
+              backgroundColor: countryTimezone
+                ? colors.primary.main
+                : 'rgba(16, 185, 129, 0.4)',
               padding: 14,
               height: 46,
               marginTop: 32,
             }}
+            disabled={!countryTimezone}
           >
             <Text
               style={{

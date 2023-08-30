@@ -3,13 +3,13 @@ import { Picker } from '@react-native-picker/picker';
 
 export const CustomSelect = ({
   value,
-  setValue,
+  onValueChange,
   options,
   placeholder,
 }: {
   placeholder: string;
   value: string;
-  setValue: (value: React.SetStateAction<string>) => void;
+  onValueChange: ((itemValue: string, itemIndex: number) => void) | undefined;
   options: { label: string; value: string }[];
 }) => {
   return (
@@ -23,17 +23,17 @@ export const CustomSelect = ({
       <Picker
         placeholder={placeholder}
         selectedValue={value}
-        onValueChange={(itemValue, itemIndex) => setValue(itemValue)}
+        onValueChange={onValueChange}
         style={{
           fontFamily: 'nunito-bold',
         }}
       >
-        {options.map((option) => {
+        {options?.map((option) => {
           return (
             <Picker.Item
-              key={option.value}
-              label={option.label}
-              value={option.value}
+              key={option?.value}
+              label={option?.label}
+              value={option?.value}
               fontFamily='nunito-bold'
               style={{
                 fontFamily: 'nunito-bold',
