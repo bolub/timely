@@ -1,9 +1,12 @@
 import { borderRadius, colors } from '@/theme/theme';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { CustomLabel } from '@/components/ui/CustomLabel';
 import countriesWithTimezone from '@/data/countriesWithTimezone.json';
+import uuid from 'react-native-uuid';
+import { getData, storeData } from '@/api/data';
+import { queryClient } from '@/app/_layout';
 
 export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
   const [country, setCountry] = useState('');
@@ -13,6 +16,7 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
     return {
       label: ctz.name,
       value: ctz.name,
+      code: ctz.country_code,
     };
   });
 
@@ -29,6 +33,31 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
           value: tz,
         };
       });
+  };
+
+  const addSlotHandler = async () => {
+    const slotId = uuid.v4();
+
+    const allTimeSlots = (await getData({ key: 'slots' })) || [];
+
+    const updatedTimeSlots = [
+      ...allTimeSlots,
+      {
+        id: slotId,
+        country,
+        country_code: countriesWithTimezone.find((ctz) => ctz.name === country)
+          ?.country_code,
+        timeZone: countryTimezone,
+      },
+    ];
+
+    await storeData({
+      key: 'slots',
+      value: updatedTimeSlots,
+    });
+
+    queryClient.invalidateQueries(['slots']);
+    onCancel();
   };
 
   return (
@@ -82,6 +111,7 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
         {/* footer */}
         <View>
           <Pressable
+            onPress={addSlotHandler}
             style={{
               justifyContent: 'center',
               borderRadius: borderRadius['extra-small'],
@@ -135,5 +165,3 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({});

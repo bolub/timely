@@ -1,14 +1,28 @@
 import { Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
-import { useQuery } from '@tanstack/react-query';
-import { getLocalData } from '@/api/timezone';
+import countriesWithTimezone from '@/data/countriesWithTimezone.json';
+
+// dayjs
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+function getCountryInfoByTimezone(timezone: string) {
+  const country = countriesWithTimezone.find((country) =>
+    country.timezones.includes(timezone)
+  );
+  return country
+    ? { name: country.name, country_code: country.country_code }
+    : null;
+}
 
 export const LocalInfo = () => {
-  const { data } = useQuery({
-    queryKey: ['localData'],
-    queryFn: getLocalData,
-  });
+  const localTimezone = dayjs.tz.guess();
+  const countryData = getCountryInfoByTimezone(localTimezone);
 
   return (
     <View
@@ -23,13 +37,12 @@ export const LocalInfo = () => {
       }}
     >
       <Image
-        source='https://www.worldometers.info//img/flags/small/tn_ao-flag.gif'
+        source={`https://flagsapi.com/${countryData?.country_code}/flat/48.png`}
         contentFit='cover'
         style={{
-          width: 36,
+          width: 48,
           height: 36,
           backgroundColor: 'white',
-          borderRadius: borderRadius.rounded,
         }}
       />
 
@@ -42,7 +55,7 @@ export const LocalInfo = () => {
           color: 'white',
         }}
       >
-        Local ({data?.timezone && data?.timezone?.replace('/', ', ')})
+        Local ({countryData?.name})
       </Text>
 
       <Text
@@ -54,7 +67,7 @@ export const LocalInfo = () => {
           color: 'white',
         }}
       >
-        {data?.datetime && new Date(data?.datetime).toLocaleTimeString()}
+        {dayjs(new Date()).format('hh:mm A')} &nbsp;
       </Text>
     </View>
   );

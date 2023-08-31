@@ -2,29 +2,16 @@ import { borderRadius } from '@/theme/theme';
 import { Image } from 'expo-image';
 import React from 'react';
 import { FlatList, Text, View, Dimensions } from 'react-native';
+import { getData } from '@/api/data';
+import { useQuery } from '@tanstack/react-query';
+import { getTimeData } from '@/api/timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import 'dayjs/locale/en';
 
-const dummyData = [
-  {
-    country: 'Finland',
-    time: '15:36PM',
-    flagUrl: 'https://www.worldometers.info//img/flags/small/tn_ao-flag.gif',
-  },
-  {
-    country: 'Nigeria',
-    time: '15:36PM',
-    flagUrl: 'https://www.worldometers.info//img/flags/small/tn_ao-flag.gif',
-  },
-  {
-    country: 'America',
-    time: '15:36PM',
-    flagUrl: 'https://www.worldometers.info//img/flags/small/tn_ao-flag.gif',
-  },
-  {
-    country: 'America2',
-    time: '15:36PM',
-    flagUrl: 'https://www.worldometers.info//img/flags/small/tn_ao-flag.gif',
-  },
-];
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const screenWidth = Dimensions.get('window').width;
 const numColumns = 2;
@@ -33,10 +20,24 @@ const gap = 10;
 const availableSpace = screenWidth - (numColumns - 1) * gap;
 const itemSize = availableSpace / numColumns;
 
+const getSlots = async () => {
+  return (await getData({ key: 'slots' })) as {
+    id: string;
+    timeZone: string;
+    country: string;
+    country_code: string;
+  }[];
+};
+
 export const TimeSlotsList = () => {
+  const { data } = useQuery({
+    queryKey: ['slots'],
+    queryFn: getSlots,
+  });
+
   return (
     <FlatList
-      data={dummyData}
+      data={data}
       renderItem={({ item }) => {
         return <TimeSlotComponent {...item} />;
       }}
@@ -55,14 +56,23 @@ export const TimeSlotsList = () => {
 };
 
 const TimeSlotComponent = ({
+  id,
+  timeZone,
   country,
-  time,
-  flagUrl,
+  country_code,
 }: {
+  id: string;
   country: string;
-  time: string;
-  flagUrl: string;
+  country_code: string;
+  timeZone: string;
 }) => {
+  const { data } = useQuery({
+    queryKey: [`${id}${timeZone}`],
+    queryFn: () => {
+      return getTimeData(timeZone);
+    },
+  });
+
   return (
     <View
       style={{
@@ -75,13 +85,12 @@ const TimeSlotComponent = ({
       }}
     >
       <Image
-        source={flagUrl}
+        source={`https://flagsapi.com/${country_code}/flat/48.png`}
         contentFit='cover'
         style={{
-          width: 40,
-          height: 40,
+          width: 48,
+          height: 48,
           backgroundColor: 'white',
-          borderRadius: borderRadius.rounded,
         }}
       />
 
@@ -92,6 +101,7 @@ const TimeSlotComponent = ({
           fontFamily: 'nunito-black',
           textTransform: 'uppercase',
           marginTop: 16,
+          textAlign: 'center',
         }}
       >
         {country}
@@ -102,9 +112,10 @@ const TimeSlotComponent = ({
           marginTop: 6,
           fontSize: 18,
           fontFamily: 'nunito-black',
+          textAlign: 'center',
         }}
       >
-        {time}
+        {dayjs.tz(data?.datetime, timeZone).format('hh:mm A')} &nbsp;
       </Text>
     </View>
   );

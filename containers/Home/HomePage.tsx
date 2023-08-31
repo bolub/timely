@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LocalInfo } from '@/containers/home/components/LocalInfo';
 import { TimeSlots } from '@/containers/home/components/time-slots';
