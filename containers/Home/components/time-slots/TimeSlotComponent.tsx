@@ -1,14 +1,14 @@
 import { borderRadius, colors } from '@/theme/theme';
-import { Image } from 'expo-image';
 import { Pressable, Text, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { getTimeData } from '@/api/timezone';
 import { utcToZonedTime, format } from 'date-fns-tz';
-import { itemSize } from '@/containers/home/components/time-slots/TimeSlotsList';
-import { getFlagUrl } from '@/utils';
 import { Feather } from '@expo/vector-icons';
 import { getData, storeData } from '@/api/data';
 import { queryClient } from '@/app/_layout';
+import SkeletonLoader from '@/components/SkeletonLoader';
+import { ImageFlag } from '@/components/ImageFlag';
+import { itemSize } from './TimeSlotsList';
 
 export const TimeSlotComponent = ({
   id,
@@ -21,7 +21,7 @@ export const TimeSlotComponent = ({
   country_code: string;
   timeZone: string;
 }) => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [`${id}${timeZone}`],
     queryFn: () => {
       return getTimeData(timeZone);
@@ -83,15 +83,7 @@ export const TimeSlotComponent = ({
         <Feather name='x-circle' size={16} color={colors.gray.main} />
       </Pressable>
 
-      <Image
-        source={getFlagUrl(country_code)}
-        contentFit='cover'
-        style={{
-          width: 48,
-          height: 48,
-          backgroundColor: 'white',
-        }}
-      />
+      <ImageFlag country_code={country_code} />
 
       <Text
         style={{
@@ -106,17 +98,26 @@ export const TimeSlotComponent = ({
         {country}
       </Text>
 
-      <Text
+      <View
         style={{
           marginTop: 6,
-          fontSize: 16,
-          fontFamily: 'nunito-black',
-          textAlign: 'center',
         }}
       >
-        {currentCountryTime}
-        &nbsp;
-      </Text>
+        {isLoading ? (
+          <SkeletonLoader width={70} height={20} />
+        ) : (
+          <Text
+            style={{
+              fontFamily: 'nunito-black',
+              textAlign: 'center',
+              fontSize: 16,
+            }}
+          >
+            {currentCountryTime}
+            &nbsp;
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
