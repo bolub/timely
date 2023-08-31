@@ -117,7 +117,7 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
               borderRadius: borderRadius['extra-small'],
               backgroundColor: countryTimezone
                 ? colors.primary.main
-                : 'rgba(16, 185, 129, 0.4)',
+                : colors.primary.disabled,
               padding: 14,
               height: 46,
               marginTop: 32,
