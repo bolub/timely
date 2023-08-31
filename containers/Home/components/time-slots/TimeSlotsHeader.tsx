@@ -8,6 +8,8 @@ import {
 } from '@gorhom/bottom-sheet';
 import { useCallback, useMemo, useRef } from 'react';
 import { NewTimeSlot } from '@/containers/home/components/time-slots/NewTimeSlot';
+import { useQuery } from '@tanstack/react-query';
+import { getSlots } from '@/api/slots';
 
 export const TimeSlotsHeader = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -24,6 +26,13 @@ export const TimeSlotsHeader = () => {
     ),
     []
   );
+
+  const { data } = useQuery({
+    queryKey: ['slots'],
+    queryFn: getSlots,
+  });
+
+  const canAddSlot = data ? data?.length < 4 : false;
 
   return (
     <View
@@ -42,33 +51,35 @@ export const TimeSlotsHeader = () => {
         Time slots
       </Text>
 
-      <Pressable
-        onPress={handlePresentModalPress}
-        style={{
-          backgroundColor: colors.primary.light,
-          padding: 10,
-          borderRadius: borderRadius.small,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <Feather
-          name='plus'
-          size={16}
-          color={colors.primary.main}
-          style={{ marginRight: 6 }}
-        />
-
-        <Text
+      {canAddSlot && (
+        <Pressable
+          onPress={handlePresentModalPress}
           style={{
-            color: colors.primary.main,
-            fontFamily: 'nunito-black',
-            fontSize: 14,
+            backgroundColor: colors.primary.light,
+            padding: 10,
+            borderRadius: borderRadius.small,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}
         >
-          New slot
-        </Text>
-      </Pressable>
+          <Feather
+            name='plus'
+            size={16}
+            color={colors.primary.main}
+            style={{ marginRight: 6 }}
+          />
+
+          <Text
+            style={{
+              color: colors.primary.main,
+              fontFamily: 'nunito-black',
+              fontSize: 14,
+            }}
+          >
+            New slot
+          </Text>
+        </Pressable>
+      )}
 
       <BottomSheetModal
         ref={bottomSheetModalRef}
