@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
 import { format } from 'date-fns-tz';
 import { getCountryInfoByTimezone } from '@/containers/home/utils';
+import { getFlagUrl } from '@/utils';
 
 export const LocalInfo = () => {
   const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -21,7 +22,7 @@ export const LocalInfo = () => {
       }}
     >
       <Image
-        source={`https://flagsapi.com/${countryData?.country_code}/flat/48.png`}
+        source={getFlagUrl(countryData?.country_code || '')}
         contentFit='cover'
         style={{
           width: 48,
