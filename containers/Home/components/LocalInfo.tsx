@@ -1,9 +1,8 @@
 import { Text, View } from 'react-native';
-import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
 import { format } from 'date-fns-tz';
 import { getCountryInfoByTimezone } from '@/containers/home/utils';
-import { getFlagUrl } from '@/utils';
+import { ImageFlag } from '@/components/ImageFlag';
 
 export const LocalInfo = () => {
   const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -21,15 +20,7 @@ export const LocalInfo = () => {
         padding: 30,
       }}
     >
-      <Image
-        source={getFlagUrl(countryData?.country_code || '')}
-        contentFit='cover'
-        style={{
-          width: 48,
-          height: 36,
-          backgroundColor: 'white',
-        }}
-      />
+      <ImageFlag country_code={countryData?.country_code || ''} />
 
       <Text
         style={{
