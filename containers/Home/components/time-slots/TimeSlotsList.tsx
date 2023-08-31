@@ -1,7 +1,7 @@
 import { FlatList, Text, View, Dimensions } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import { TimeSlotComponent } from '@/containers/home/components/time-slots/TimeSlotComponent';
 import { getSlots } from '@/api/slots';
+import { TimeSlotComponent } from './TimeSlotComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const numColumns = 2;

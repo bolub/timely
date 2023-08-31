@@ -7,8 +7,11 @@ import countriesWithTimezone from '@/data/countriesWithTimezone.json';
 import uuid from 'react-native-uuid';
 import { getData, storeData } from '@/api/data';
 import { queryClient } from '@/app/_layout';
+import useToast from '@/hooks/useToast';
 
 export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
+  const toast = useToast();
+
   const [country, setCountry] = useState('');
   const [countryTimezone, setCountryTimezone] = useState('');
 
@@ -56,7 +59,8 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
       value: updatedTimeSlots,
     });
 
-    queryClient.invalidateQueries(['slots']);
+    queryClient.invalidateQueries();
+    toast(`${country} time slot created successfully`);
     onCancel();
   };
 

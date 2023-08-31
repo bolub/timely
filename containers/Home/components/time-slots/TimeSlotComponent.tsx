@@ -9,6 +9,7 @@ import { queryClient } from '@/app/_layout';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import { ImageFlag } from '@/components/ImageFlag';
 import { itemSize } from './TimeSlotsList';
+import useToast from '@/hooks/useToast';
 
 export const TimeSlotComponent = ({
   id,
@@ -21,6 +22,8 @@ export const TimeSlotComponent = ({
   country_code: string;
   timeZone: string;
 }) => {
+  const toast = useToast();
+
   const { data, isLoading } = useQuery({
     queryKey: [`${id}${timeZone}`],
     queryFn: () => {
@@ -53,7 +56,8 @@ export const TimeSlotComponent = ({
       value: newTimeSlots,
     });
 
-    queryClient.invalidateQueries(['slots']);
+    queryClient.invalidateQueries();
+    toast(`${country} time slot removed`);
   };
 
   return (
