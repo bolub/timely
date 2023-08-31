@@ -44,8 +44,9 @@ export const TimeSlotsHeader = () => {
     >
       <Text
         style={{
-          fontSize: 18,
-          fontFamily: 'nunito-bold',
+          fontSize: 14,
+          fontFamily: 'nunito-black',
+          textTransform: 'uppercase',
         }}
       >
         Time slots
