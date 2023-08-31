@@ -7,13 +7,14 @@ import {
   BottomSheetModal,
 } from '@gorhom/bottom-sheet';
 import { useCallback, useMemo, useRef } from 'react';
-import { NewTimeSlot } from '@/containers/home/components/time-slots/NewTimeSlot';
 import { useQuery } from '@tanstack/react-query';
 import { getSlots } from '@/api/slots';
+import { NewTimeSlot } from './NewTimeSlot';
+import { queryClient } from '@/app/_layout';
+import useToast from '@/hooks/useToast';
 
 export const TimeSlotsHeader = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
   const snapPoints = useMemo(() => ['90%'], []);
 
   const { data } = useQuery({
@@ -35,69 +36,108 @@ export const TimeSlotsHeader = () => {
   );
 
   return (
-    <View
+    <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 14,
+            fontFamily: 'nunito-black',
+            textTransform: 'uppercase',
+          }}
+        >
+          Time slots
+        </Text>
+
+        <View
+          style={{
+            backgroundColor: colors.primary.light,
+            borderRadius: borderRadius.small,
+            flexDirection: 'row',
+            gap: 4,
+          }}
+        >
+          {canAddSlot && <AddSlotButton onAdd={handlePresentModalPress} />}
+
+          <RefreshSlotsButton />
+        </View>
+
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          // index={1}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackdrop}
+          keyboardBehavior='interactive'
+        >
+          <View style={styles.contentContainer}>
+            <NewTimeSlot
+              onCancel={() => {
+                bottomSheetModalRef.current?.close();
+              }}
+            />
+          </View>
+        </BottomSheetModal>
+      </View>
+    </View>
+  );
+};
+
+const AddSlotButton = ({ onAdd }: { onAdd: () => void }) => {
+  return (
+    <Pressable
       style={{
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRightWidth: 1,
+        borderRightColor: colors.primary.disabled,
       }}
+      onPress={onAdd}
     >
       <Text
         style={{
-          fontSize: 14,
+          color: colors.primary.main,
           fontFamily: 'nunito-black',
-          textTransform: 'uppercase',
+          fontSize: 13,
         }}
       >
-        Time slots
+        New slot
       </Text>
+    </Pressable>
+  );
+};
 
-      {canAddSlot && (
-        <Pressable
-          onPress={handlePresentModalPress}
-          style={{
-            backgroundColor: colors.primary.light,
-            padding: 10,
-            borderRadius: borderRadius.small,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Feather
-            name='plus'
-            size={16}
-            color={colors.primary.main}
-            style={{ marginRight: 6 }}
-          />
+const RefreshSlotsButton = () => {
+  const toast = useToast();
 
-          <Text
-            style={{
-              color: colors.primary.main,
-              fontFamily: 'nunito-black',
-              fontSize: 14,
-            }}
-          >
-            New slot
-          </Text>
-        </Pressable>
-      )}
-
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        // index={1}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}
-        keyboardBehavior='interactive'
-      >
-        <View style={styles.contentContainer}>
-          <NewTimeSlot
-            onCancel={() => {
-              bottomSheetModalRef.current?.close();
-            }}
-          />
-        </View>
-      </BottomSheetModal>
-    </View>
+  return (
+    <Pressable
+      style={{
+        borderRadius: borderRadius.small,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 6,
+      }}
+      onPress={() => {
+        queryClient.invalidateQueries();
+        toast('Time slots updated with current time');
+      }}
+    >
+      <Feather
+        name='refresh-cw'
+        size={16}
+        color={colors.primary.main}
+        style={{ marginRight: 4 }}
+      />
+    </Pressable>
   );
 };
 

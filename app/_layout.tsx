@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/nunito';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,17 +54,19 @@ export default function Layout() {
   }
 
   return (
-    <BottomSheetModalProvider>
-      <QueryClientProvider client={queryClient}>
-        <Stack>
-          <Stack.Screen
-            name='index'
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack>
-      </QueryClientProvider>
-    </BottomSheetModalProvider>
+    <RootSiblingParent>
+      <BottomSheetModalProvider>
+        <QueryClientProvider client={queryClient}>
+          <Stack>
+            <Stack.Screen
+              name='index'
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </QueryClientProvider>
+      </BottomSheetModalProvider>
+    </RootSiblingParent>
   );
 }
