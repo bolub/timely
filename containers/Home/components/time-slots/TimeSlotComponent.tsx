@@ -55,7 +55,7 @@ export const TimeSlotComponent = ({
       <Text
         style={{
           color: '#71717A',
-          fontSize: 14,
+          fontSize: 12,
           fontFamily: 'nunito-black',
           textTransform: 'uppercase',
           marginTop: 16,
@@ -68,7 +68,7 @@ export const TimeSlotComponent = ({
       <Text
         style={{
           marginTop: 6,
-          fontSize: 18,
+          fontSize: 16,
           fontFamily: 'nunito-black',
           textAlign: 'center',
         }}

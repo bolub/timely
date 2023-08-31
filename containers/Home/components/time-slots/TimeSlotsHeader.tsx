@@ -10,19 +10,12 @@ import { useCallback, useMemo, useRef } from 'react';
 import { NewTimeSlot } from '@/containers/home/components/time-slots/NewTimeSlot';
 
 export const TimeSlotsHeader = () => {
-  // ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  // variables
   const snapPoints = useMemo(() => ['90%'], []);
 
-  // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
-  }, []);
-
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
   }, []);
 
   const renderBackdrop = useCallback(
@@ -81,7 +74,6 @@ export const TimeSlotsHeader = () => {
         ref={bottomSheetModalRef}
         // index={1}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         backdropComponent={renderBackdrop}
         keyboardBehavior='interactive'
       >
