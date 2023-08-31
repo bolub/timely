@@ -1,17 +1,8 @@
 import { Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
-import countriesWithTimezone from '@/data/countriesWithTimezone.json';
 import { format } from 'date-fns-tz';
-
-function getCountryInfoByTimezone(timezone: string) {
-  const country = countriesWithTimezone.find((country) =>
-    country.timezones.includes(timezone)
-  );
-  return country
-    ? { name: country.name, country_code: country.country_code }
-    : null;
-}
+import { getCountryInfoByTimezone } from '@/containers/home/utils';
 
 export const LocalInfo = () => {
   const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
