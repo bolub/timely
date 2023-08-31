@@ -1,7 +1,8 @@
 export const colors = {
   primary: {
     main: '#10B981',
-    light: 'rgba(16, 185, 129, 0.10)',
+    light: 'rgba(16, 185, 129, 0.1)',
+    disabled: 'rgba(16, 185, 129, 0.4)',
   },
   gray: {
     main: '#71717A',
