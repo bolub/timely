@@ -2,14 +2,7 @@ import { Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { borderRadius, colors } from '@/theme/theme';
 import countriesWithTimezone from '@/data/countriesWithTimezone.json';
-
-// dayjs
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import { format } from 'date-fns-tz';
 
 function getCountryInfoByTimezone(timezone: string) {
   const country = countriesWithTimezone.find((country) =>
@@ -21,7 +14,7 @@ function getCountryInfoByTimezone(timezone: string) {
 }
 
 export const LocalInfo = () => {
-  const localTimezone = dayjs.tz.guess();
+  const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const countryData = getCountryInfoByTimezone(localTimezone);
 
   return (
@@ -67,7 +60,7 @@ export const LocalInfo = () => {
           color: 'white',
         }}
       >
-        {dayjs(new Date()).format('hh:mm A')} &nbsp;
+        {format(new Date(), 'HH:mm a')}
       </Text>
     </View>
   );

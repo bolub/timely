@@ -5,13 +5,7 @@ import { FlatList, Text, View, Dimensions } from 'react-native';
 import { getData } from '@/api/data';
 import { useQuery } from '@tanstack/react-query';
 import { getTimeData } from '@/api/timezone';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/en';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import { utcToZonedTime, format } from 'date-fns-tz';
 
 const screenWidth = Dimensions.get('window').width;
 const numColumns = 2;
@@ -73,6 +67,13 @@ const TimeSlotComponent = ({
     },
   });
 
+  const zonedDate = data?.datetime
+    ? utcToZonedTime(data?.datetime, timeZone)
+    : '';
+  const output = zonedDate
+    ? format(zonedDate, 'HH:mm a', { timeZone: 'Europe/Berlin' })
+    : '';
+
   return (
     <View
       style={{
@@ -115,7 +116,7 @@ const TimeSlotComponent = ({
           textAlign: 'center',
         }}
       >
-        {dayjs.tz(data?.datetime, timeZone).format('hh:mm A')} &nbsp;
+        {output} &nbsp;
       </Text>
     </View>
   );
