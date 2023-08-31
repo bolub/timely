@@ -16,6 +16,13 @@ export const TimeSlotsHeader = () => {
 
   const snapPoints = useMemo(() => ['90%'], []);
 
+  const { data } = useQuery({
+    queryKey: ['slots'],
+    queryFn: getSlots,
+  });
+
+  const canAddSlot = data ? data?.length < 4 : false;
+
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -26,13 +33,6 @@ export const TimeSlotsHeader = () => {
     ),
     []
   );
-
-  const { data } = useQuery({
-    queryKey: ['slots'],
-    queryFn: getSlots,
-  });
-
-  const canAddSlot = data ? data?.length < 4 : false;
 
   return (
     <View
