@@ -1,10 +1,14 @@
-import { borderRadius } from '@/theme/theme';
+import { borderRadius, colors } from '@/theme/theme';
 import { Image } from 'expo-image';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { getTimeData } from '@/api/timezone';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import { itemSize } from '@/containers/home/components/time-slots/TimeSlotsList';
+import { getFlagUrl } from '@/utils';
+import { Feather } from '@expo/vector-icons';
+import { getData, storeData } from '@/api/data';
+import { queryClient } from '@/app/_layout';
 
 export const TimeSlotComponent = ({
   id,
@@ -27,9 +31,30 @@ export const TimeSlotComponent = ({
   const zonedDate = data?.datetime
     ? utcToZonedTime(data?.datetime, timeZone)
     : '';
-  const output = zonedDate
-    ? format(zonedDate, 'HH:mm a', { timeZone: 'Europe/Berlin' })
+  const currentCountryTime = zonedDate
+    ? format(zonedDate, 'HH:mm a', { timeZone })
     : '';
+
+  const handleRemoveTimeSlot = async () => {
+    const allTimeSlots =
+      ((await getData({ key: 'slots' })) as {
+        id: string;
+        country: string;
+        country_code: string;
+        timeZone: string;
+      }[]) || [];
+
+    const newTimeSlots = allTimeSlots.filter((slot) => {
+      return slot.id !== id;
+    });
+
+    await storeData({
+      key: 'slots',
+      value: newTimeSlots,
+    });
+
+    queryClient.invalidateQueries(['slots']);
+  };
 
   return (
     <View
@@ -40,10 +65,26 @@ export const TimeSlotComponent = ({
         width: itemSize - 24,
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'relative',
+        padding: 10,
       }}
     >
+      <Pressable
+        onPress={handleRemoveTimeSlot}
+        style={{
+          position: 'absolute',
+          right: 10,
+          top: 10,
+          borderRadius: borderRadius.small,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Feather name='x-circle' size={16} color={colors.gray.main} />
+      </Pressable>
+
       <Image
-        source={`https://flagsapi.com/${country_code}/flat/48.png`}
+        source={getFlagUrl(country_code)}
         contentFit='cover'
         style={{
           width: 48,
@@ -54,7 +95,7 @@ export const TimeSlotComponent = ({
 
       <Text
         style={{
-          color: '#71717A',
+          color: colors.gray.main,
           fontSize: 12,
           fontFamily: 'nunito-black',
           textTransform: 'uppercase',
@@ -73,7 +114,8 @@ export const TimeSlotComponent = ({
           textAlign: 'center',
         }}
       >
-        {output} &nbsp;
+        {currentCountryTime}
+        &nbsp;
       </Text>
     </View>
   );
