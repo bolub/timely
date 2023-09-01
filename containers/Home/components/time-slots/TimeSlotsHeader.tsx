@@ -22,7 +22,7 @@ export const TimeSlotsHeader = () => {
     queryFn: getSlots,
   });
 
-  const canAddSlot = data ? data?.length < 4 : false;
+  const canAddSlot = data ? data?.length < 4 : true;
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
