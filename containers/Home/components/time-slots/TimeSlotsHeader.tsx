@@ -1,22 +1,21 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { borderRadius, colors } from '@/theme/theme';
-import {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-  BottomSheetModal,
-} from '@gorhom/bottom-sheet';
-import { useCallback, useMemo, useRef } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getSlots } from '@/api/slots';
 import { NewTimeSlot } from './NewTimeSlot';
 import { queryClient } from '@/app/_layout';
 import useToast from '@/hooks/useToast';
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetDragIndicator,
+} from '@gluestack-ui/themed';
 
 export const TimeSlotsHeader = () => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['90%'], []);
-
   const { data } = useQuery({
     queryKey: ['slots'],
     queryFn: getSlots,
@@ -24,65 +23,62 @@ export const TimeSlotsHeader = () => {
 
   const canAddSlot = data ? data?.length < 4 : false;
 
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) => (
-      <BottomSheetBackdrop {...props} pressBehavior='close' />
-    ),
-    []
-  );
+  const [showActionsheet, setShowActionsheet] = useState(false);
+  const handleClose = () => setShowActionsheet(!showActionsheet);
 
   return (
-    <View>
-      <View
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Text
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          fontSize: 14,
+          fontFamily: 'nunito-black',
+          textTransform: 'uppercase',
         }}
       >
-        <Text
-          style={{
-            fontSize: 14,
-            fontFamily: 'nunito-black',
-            textTransform: 'uppercase',
-          }}
-        >
-          Time slots
-        </Text>
+        Time slots
+      </Text>
 
-        <View
-          style={{
-            backgroundColor: colors.primary.light,
-            borderRadius: borderRadius.small,
-            flexDirection: 'row',
-            gap: 4,
-          }}
-        >
-          {canAddSlot && <AddSlotButton onAdd={handlePresentModalPress} />}
+      <View
+        style={{
+          backgroundColor: colors.primary.light,
+          borderRadius: borderRadius.small,
+          flexDirection: 'row',
+          gap: 4,
+        }}
+      >
+        {canAddSlot && (
+          <AddSlotButton
+            onAdd={() => {
+              handleClose();
+            }}
+          />
+        )}
 
-          <RefreshSlotsButton />
-        </View>
+        <RefreshSlotsButton />
+      </View>
 
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          // index={1}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}
-          keyboardBehavior='interactive'
-        >
+      <Actionsheet isOpen={showActionsheet} onClose={handleClose}>
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+
           <View style={styles.contentContainer}>
             <NewTimeSlot
               onCancel={() => {
-                bottomSheetModalRef.current?.close();
+                handleClose();
               }}
             />
           </View>
-        </BottomSheetModal>
-      </View>
+        </ActionsheetContent>
+      </Actionsheet>
     </View>
   );
 };
@@ -152,5 +148,6 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 24,
     backgroundColor: 'white',
+    width: '100%',
   },
 });
