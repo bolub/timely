@@ -10,7 +10,6 @@ import {
   Nunito_900Black,
 } from '@expo-google-fonts/nunito';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootSiblingParent } from 'react-native-root-siblings';
 
 export {
@@ -55,18 +54,16 @@ export default function Layout() {
 
   return (
     <RootSiblingParent>
-      <BottomSheetModalProvider>
-        <QueryClientProvider client={queryClient}>
-          <Stack>
-            <Stack.Screen
-              name='index'
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Stack>
-        </QueryClientProvider>
-      </BottomSheetModalProvider>
+      <QueryClientProvider client={queryClient}>
+        <Stack>
+          <Stack.Screen
+            name='index'
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </QueryClientProvider>
     </RootSiblingParent>
   );
 }
