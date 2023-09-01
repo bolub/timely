@@ -139,31 +139,6 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
               Add new slot
             </Text>
           </Pressable>
-
-          <Pressable
-            onPress={onCancel}
-            style={{
-              justifyContent: 'center',
-              borderRadius: borderRadius['extra-small'],
-              backgroundColor: 'white',
-              padding: 14,
-              height: 46,
-              marginTop: 6,
-              borderWidth: 1,
-              borderColor: colors.primary.main,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.primary.main,
-                fontFamily: 'nunito-extrabold',
-                textAlign: 'center',
-                fontSize: 14,
-              }}
-            >
-              Cancel
-            </Text>
-          </Pressable>
         </View>
       </>
     </>
