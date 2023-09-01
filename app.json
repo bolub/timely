@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "timely",
+    "name": "Timely",
     "slug": "timely",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,9 +18,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.boluseyi.timely"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,14 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "857586b4-aba7-4989-840f-480030a8e081"
+      }
     }
   }
 }
