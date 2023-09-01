@@ -1,6 +1,6 @@
 import { borderRadius, colors } from '@/theme/theme';
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { CustomLabel } from '@/components/ui/CustomLabel';
 import countriesWithTimezone from '@/data/countriesWithTimezone.json';
@@ -8,6 +8,7 @@ import uuid from 'react-native-uuid';
 import { getData, storeData } from '@/api/data';
 import { queryClient } from '@/app/_layout';
 import useToast from '@/hooks/useToast';
+import { Button } from '@gluestack-ui/themed';
 
 export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
   const toast = useToast();
@@ -83,6 +84,7 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
           }}
         >
           <CustomLabel>Choose a country</CustomLabel>
+
           <CustomSelect
             onValueChange={(itemValue) => {
               setCountry(itemValue);
@@ -114,18 +116,15 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
 
         {/* footer */}
         <View>
-          <Pressable
+          <Button
             onPress={addSlotHandler}
-            style={{
-              justifyContent: 'center',
-              borderRadius: borderRadius['extra-small'],
-              backgroundColor: countryTimezone
-                ? colors.primary.main
-                : colors.primary.disabled,
-              padding: 14,
-              height: 46,
-              marginTop: 32,
-            }}
+            borderRadius={borderRadius['extra-small']}
+            bgColor={
+              countryTimezone ? colors.primary.main : colors.primary.disabled
+            }
+            padding={14}
+            height={46}
+            marginTop={32}
             disabled={!countryTimezone}
           >
             <Text
@@ -138,7 +137,7 @@ export const NewTimeSlot = ({ onCancel }: { onCancel: () => void }) => {
             >
               Add new slot
             </Text>
-          </Pressable>
+          </Button>
         </View>
       </>
     </>
