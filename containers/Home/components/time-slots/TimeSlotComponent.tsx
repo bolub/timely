@@ -29,6 +29,7 @@ export const TimeSlotComponent = ({
     queryFn: () => {
       return getTimeData(timeZone);
     },
+    enabled: !!timeZone,
   });
 
   const zonedDate = data?.datetime
